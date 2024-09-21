@@ -12,6 +12,7 @@ export class RoutineController {
   @UseGuards(AuthGuard)
   async getManyRoutinesByUser(@Req() req) {
     const userId = req.user.id;
+    console.log("eu sou o user id", userId)
     return this.routineService.getManyRoutinesByUser(userId)
   }
 

@@ -6,12 +6,38 @@ import { InsertExerciseInRoutineDTO } from "./dtos/insert-exercise-in-routine.DT
 @Injectable()
 export class RoutineService {
   async getManyRoutinesByUser(userId: string) {
-    await dbConnection`SELECT * FROM routines WHERE user_id = ${userId}`
+    return dbConnection`
+SELECT 
+  r.*, 
+  JSON_AGG(
+    JSON_BUILD_OBJECT(
+      'exercise_id_in_exercises', re.exercise_id,
+      'id', e.id,
+      'name', e.name,
+      'group', e.muscle_group,
+      'gif', e.gif_url,
+      'img_url', e.img_url,
+      'description', e.description,
+      'series', ARRAY[]::text[]  -- Adiciona um array vazio para séries dentro de cada exercício
+    )
+  ) AS exercises
+FROM 
+  routines r
+LEFT JOIN 
+  routine_exercises re ON r.id = re.routine_id
+LEFT JOIN 
+  exercises e ON re.exercise_id = e.id
+WHERE 
+  r.user_id = ${userId}
+  GROUP BY 
+  r.id;
+`
   }
 
   async createRoutine(data: CreateRoutineDTO, userId: string) {
-    await dbConnection`INSERT INTO routines (user_id, name)
+    return dbConnection`INSERT INTO routines (user_id, name)
     VALUES (${userId}, ${data.routineName})
+    RETURNING id
     `
   }
 
@@ -26,6 +52,6 @@ export class RoutineService {
   }
 
   async removeExerciseFromRoutine(exerciseId: string) {
-    await dbConnection`DELETE FROM routine_exercises WHERE id = ${exerciseId}`
+    await dbConnection`DELETE FROM routine_exercises WHERE exercise_id = ${exerciseId}`
   }
 }

@@ -5,7 +5,11 @@ import { CreateTrainingSessionDTO } from "./dtos/create-training-session.DTO";
 @Injectable()
 export class TrainingSessionService {
   async getHistoryByUser(userId: string) {
-    return dbConnection`SELECT * FROM workouts WHERE user_id = ${userId}`
+    return dbConnection`
+    SELECT r.name, w.id, w.duration, w.created_at FROM workouts w 
+    JOIN routines r ON r.id  = w.routine_id
+    WHERE w.user_id = ${userId}
+    ORDER BY w.created_at DESC`
   }
 
   async createTrainingSession(data: CreateTrainingSessionDTO) {

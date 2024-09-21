@@ -4,7 +4,8 @@ import { dbConnection } from "src/config/db";
 @Injectable()
 export class UserService {
   async getUser(userId: string) {
-    return dbConnection`SELECT * FROM users WHERE id = ${userId}`;
+    const [user] = await dbConnection`SELECT * FROM users WHERE id = ${userId}`;
+    return user
   }
 
   async getMetricsUser(userId: string) {

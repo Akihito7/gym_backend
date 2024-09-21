@@ -1,11 +1,11 @@
-import { IsString } from "class-validator";
+import { IsNumber, isNumber, IsString } from "class-validator";
 
 export class CreateTrainingSessionDTO {
 
-  @IsString()
-  userId : string;
-  @IsString()
-  routineId : string;
+  @IsNumber()
+  userId : number;
+  @IsNumber()
+  routineId : number;
   @IsString()
   duration : string;
 }

@@ -1,10 +1,10 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class InsertExerciseInRoutineDTO {
-  @IsString()
-  routineId : string;
-  @IsString()
-  exerciseId : string;
-  @IsString()
-  order : string;
+  @IsNumber()
+  routineId : number;
+  @IsNumber()
+  exerciseId : number;
+  @IsNumber()
+  order : number;
 }
