@@ -24,6 +24,7 @@ export class UserService {
         SELECT ws.id FROM workouts w
         JOIN workouts_exercises we ON we.workout_id = w.id
         JOIN workout_sets ws ON ws.workout_exercise_id = we.id
+        WHERE w.user_id = ${userId}
       )
     `;
   }
