@@ -7,7 +7,11 @@ export class RoutineService {
     await dbConnection`SELECT * FROM routines WHERE user_id = ${userId}`
   }
 
+  async deleteRoutine(routineId: string) {
+    await dbConnection`DELETE FROM routines WHERE id = ${routineId}`
+  }
+
   async removeExerciseFromRoutine(exerciseId: string) {
-   await dbConnection`DELETE FROM routine_exercises WHERE id = ${exerciseId}`
+    await dbConnection`DELETE FROM routine_exercises WHERE id = ${exerciseId}`
   }
 }

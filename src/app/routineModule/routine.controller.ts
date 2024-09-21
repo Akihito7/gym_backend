@@ -13,7 +13,13 @@ export class RoutineController {
     return this.routineService.getManyRoutinesByUser(userId)
   }
 
-  @Delete(":exerciseId")
+  @Delete(":routineId")
+  @HttpCode(204)
+  async deleteRoutine(@Param("routineId") exerciseId : string){
+    return this.routineService.deleteRoutine(exerciseId);
+  }
+
+  @Delete("exercise/:exerciseId")
   @HttpCode(204)
   async removeExerciseFromRoutine(@Param("exerciseId") exerciseId : string){
     return this.routineService.removeExerciseFromRoutine(exerciseId);
