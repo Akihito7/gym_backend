@@ -1,6 +1,7 @@
-import { Controller, Delete, Get, HttpCode, Param, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { RoutineService } from "./routine.service";
 import { AuthGuard } from "src/guards/auth.guard";
+import { CreateRoutineDTO } from "./dtos/create-routine.DTO";
 
 
 @Controller("routines")
@@ -11,6 +12,12 @@ export class RoutineController {
   async getManyRoutinesByUser(@Req() req) {
     const userId = req.user.id;
     return this.routineService.getManyRoutinesByUser(userId)
+  }
+
+  @Post()
+  @UseGuards(AuthGuard)
+  async createRoutine(@Req() req , @Body() body : CreateRoutineDTO){
+    return this.routineService.createRoutine(body, req.user.id)
   }
 
   @Delete(":routineId")
