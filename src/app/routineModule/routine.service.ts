@@ -28,6 +28,7 @@ LEFT JOIN
 LEFT JOIN 
   exercises e ON re.exercise_id = e.id
 WHERE 
+  r.is_excluded is TRUE
   r.user_id = ${userId}
   GROUP BY 
   r.id;
