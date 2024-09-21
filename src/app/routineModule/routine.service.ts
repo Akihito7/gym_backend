@@ -28,8 +28,8 @@ LEFT JOIN
 LEFT JOIN 
   exercises e ON re.exercise_id = e.id
 WHERE 
-  r.is_excluded is TRUE
-  r.user_id = ${userId}
+  r.is_excluded is not TRUE
+  AND r.user_id = ${userId}
   GROUP BY 
   r.id;
 `
@@ -49,7 +49,7 @@ WHERE
   }
 
   async deleteRoutine(routineId: string) {
-    await dbConnection`DELETE FROM routines WHERE id = ${routineId}`
+    await dbConnection`UPDATE routines SET is_excluded = TRUE where id = ${routineId}`
   }
 
   async removeExerciseFromRoutine(exerciseId: string) {
