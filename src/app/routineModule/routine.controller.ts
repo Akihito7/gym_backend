@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards } 
 import { RoutineService } from "./routine.service";
 import { AuthGuard } from "src/guards/auth.guard";
 import { CreateRoutineDTO } from "./dtos/create-routine.DTO";
+import { InsertExerciseInRoutineDTO } from "./dtos/insert-exercise-in-routine.DTO";
 
 
 @Controller("routines")
@@ -18,6 +19,11 @@ export class RoutineController {
   @UseGuards(AuthGuard)
   async createRoutine(@Req() req , @Body() body : CreateRoutineDTO){
     return this.routineService.createRoutine(body, req.user.id)
+  }
+
+  @Post("exercise")
+  async insertExerciseInRoutine(@Body() body : InsertExerciseInRoutineDTO){
+    return this.routineService.insertExerciseInRoutine(body)
   }
 
   @Delete(":routineId")
