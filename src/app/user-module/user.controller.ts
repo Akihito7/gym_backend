@@ -9,7 +9,6 @@ export class UserController {
   @Get()
   @UseGuards(AuthGuard)
   async getUser(@Req() req){
-    console.log("entrei here")
     return this.userService.getUser(req.user.id)
   }
   

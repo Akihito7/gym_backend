@@ -16,4 +16,15 @@ export class TrainingSessionController {
   async createTrainingSession(@Body() body: CreateTrainingSessionDTO) {
     return this.trainingSessionService.createTrainingSession(body)
   }
+
+  @Post("exercise")
+  @UseGuards(AuthGuard)
+  async insertExercisesInTrainingSession(@Body()  body : any){
+    return this.trainingSessionService.insertExercisesInTrainingSession(body)
+  }
+  @Post("exercise/series")
+  async insertIntoSetsInTrainingSession(@Body() body: any) {
+    return this.trainingSessionService.insertIntoSetsInTrainingSession(body)
+  }
+
 }
