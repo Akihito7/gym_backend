@@ -46,4 +46,14 @@ export class AuthService {
     }
   }
 
+  verifyToken(token : string){
+    try {
+      this.jwtService.verify(token);
+      return {
+        isValid : true
+      }
+    } catch (error) {
+      throw new BadRequestException("Token inválido")
+    }
+  }
 }
