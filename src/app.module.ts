@@ -6,9 +6,12 @@ import { ExerciseModule } from './app/exercisesModule/exercise.module';
 import { RoutineModule } from './app/routineModule/routine.module';
 import { TrainingSessionModule } from './app/trainingSessionModule/training-session.module';
 import { UserModule } from './app/user-module/user.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule,ExerciseModule, RoutineModule, TrainingSessionModule, UserModule],
+  imports: [ConfigModule.forRoot({
+    isGlobal : true,
+  }),AuthModule,ExerciseModule, RoutineModule, TrainingSessionModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

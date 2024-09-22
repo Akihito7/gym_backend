@@ -4,10 +4,10 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { CreateTrainingSessionDTO } from "./dtos/create-training-session.DTO";
 
 @Controller("training-sessions")
+@UseGuards(AuthGuard)
 export class TrainingSessionController {
   constructor(private readonly trainingSessionService: TrainingSessionService) { }
   @Get(":userId")
-  @UseGuards(AuthGuard)
   async getHistoryByUser(@Param("userId") userId: string) {
     return this.trainingSessionService.getHistoryByUser(userId);
   }
@@ -18,7 +18,6 @@ export class TrainingSessionController {
   }
 
   @Post("exercise")
-  @UseGuards(AuthGuard)
   async insertExercisesInTrainingSession(@Body()  body : any){
     return this.trainingSessionService.insertExercisesInTrainingSession(body)
   }

@@ -6,17 +6,16 @@ import { InsertExerciseInRoutineDTO } from "./dtos/insert-exercise-in-routine.DT
 
 
 @Controller("routines")
+@UseGuards(AuthGuard)
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) { }
   @Get()
-  @UseGuards(AuthGuard)
   async getManyRoutinesByUser(@Req() req) {
     const userId = req.user.id;
     return this.routineService.getManyRoutinesByUser(userId)
   }
 
   @Post()
-  @UseGuards(AuthGuard)
   async createRoutine(@Req() req , @Body() body : CreateRoutineDTO){
     return this.routineService.createRoutine(body, req.user.id)
   }
