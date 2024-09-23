@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Res } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignlnDTO } from "./dtos/signln.DTO";
-import { JwtService } from "@nestjs/jwt"
 import { SignupDTO } from "./dtos/signup.DTO";
+import { ResetPasswordDTO } from "./dtos/reset-password.DTO";
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +23,24 @@ export class AuthController {
   @Get("verify-token/:token")
   async verfifyToken(@Param("token") token : string){
     return this.authService.verifyToken(token)
+  }
+
+  @Patch("reset-password/:token")
+  async resetPassword(
+    @Param("token") token : string,
+    @Body() body : ResetPasswordDTO
+  ){
+    return this.authService.resetPassword(token, body);
+  } 
+
+  @Get("forget-password/:email")
+  async forgetPassword(@Param("email") email : string, @Res() res){
+    return this.authService.forgetPassword(email);
+  }
+
+  @Get("forget-password/redirect/:token")
+  async forgetPasswordRedirect(@Param("token") token : string, @Res() res){
+    res.redirect(`akihitogym://reset-password/${token}`)
   }
 
 }
