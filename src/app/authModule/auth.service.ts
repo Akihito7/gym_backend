@@ -8,6 +8,7 @@ import { ResetPasswordDTO } from "./dtos/reset-password.DTO";
 import { ConfigService } from "@nestjs/config";
 import { NotFoundError } from "rxjs";
 import { EmailService } from "../emailModule/email.service";
+import { PasswordService } from "./password.service";
 
 @Injectable()
 export class AuthService {
@@ -15,13 +16,18 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly passwordService: PasswordService
   ) { };
   async signln(data: SignlnDTO) {
-    const [user] = await dbConnection`SELECT * FROM users WHERE email = ${data.email}`;
+
+    const user = await this.findUserByEmail(data.email);
     if (!user) throw new UnauthorizedException("Email e/ou senha inválidos");
-    const passwordMatched = await compare(data.password, user.password);
-    if (!passwordMatched) throw new UnauthorizedException("Email e/ou senha inválidos");
+
+
+    const passwordMatch = await this.passwordService.compare(data.password, user.password)
+    if (!passwordMatch) throw new UnauthorizedException("Email e/ou senha inválidos");
+
     const token = await this.generateToken(String(user.id));
     return { token }
   }
@@ -48,7 +54,7 @@ export class AuthService {
     const verifyToken = String(token).split(" ")[1]
     try {
       const isValidToken = this.jwtService.verify(verifyToken, {
-        secret : this.configService.get<string>("JWT_SECRET")
+        secret: this.configService.get<string>("JWT_SECRET")
       })
       return isValidToken
     } catch (error) {
@@ -82,7 +88,7 @@ export class AuthService {
       await this.emailService.sendEmail({
         to: email,
         subject: `Troque sua senha`,
-        text: `Para trocar sua senha, acesse o seguinte link: ${resetLink}`, 
+        text: `Para trocar sua senha, acesse o seguinte link: ${resetLink}`,
       });
     } catch (error) {
       throw new BadRequestException("Não foi possível enviar o e-mail");
@@ -100,5 +106,10 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestException("Token inválido")
     }
+  }
+  async findUserByEmail(email: string) {
+    const result = await dbConnection`SELECT * FROM users WHERE email = ${email}`;
+    const user = result?.[0];
+    return user;
   }
 }
