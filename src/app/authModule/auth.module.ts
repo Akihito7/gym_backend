@@ -7,6 +7,7 @@ import { EmailModule } from "../emailModule/email.module";
 import { PasswordService } from "./password.service";
 import { HashProvider } from "./hash-provider";
 import { BcryptService } from "./bcrypt.service";
+import { DatabaseService } from "src/config/database/database.service";
 
 @Global()
 @Module({
@@ -21,14 +22,14 @@ import { BcryptService } from "./bcrypt.service";
         }
       }),
     }),
-    EmailModule
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, PasswordService,
     {
       provide: HashProvider,
       useClass: BcryptService
-    }],
-  exports: [PasswordService]
+    },],
+  exports: [PasswordService, AuthService]
 })
 export class AuthModule { }

@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { dbConnection } from "src/config/db";
+import { ExerciseRepository } from "./exercise.repository";
 
 @Injectable()
 export class ExerciseService {
+  constructor(private readonly exerciseRepository: ExerciseRepository) { }
   async getManyExercises() {
-    return dbConnection`SELECT * FROM exercises`
+    return this.exerciseRepository.getManyExercises()
   }
 }

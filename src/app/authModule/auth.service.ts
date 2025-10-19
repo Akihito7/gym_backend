@@ -2,13 +2,13 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { SignlnDTO } from "./dtos/signln.DTO";
 import { dbConnection } from "src/config/db";
 import { JwtService } from "@nestjs/jwt";
-import { hash, compare } from "bcrypt";
+import { hash } from "bcrypt";
 import { SignupDTO } from "./dtos/signup.DTO";
 import { ResetPasswordDTO } from "./dtos/reset-password.DTO";
 import { ConfigService } from "@nestjs/config";
-import { NotFoundError } from "rxjs";
 import { EmailService } from "../emailModule/email.service";
 import { PasswordService } from "./password.service";
+import { DatabaseService } from "src/config/database/database.service";
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
-    private readonly passwordService: PasswordService
+    private readonly passwordService: PasswordService,
+    private readonly databaseService: DatabaseService
   ) { };
   async signln(data: SignlnDTO) {
 
@@ -108,7 +109,7 @@ export class AuthService {
     }
   }
   async findUserByEmail(email: string) {
-    const result = await dbConnection`SELECT * FROM users WHERE email = ${email}`;
+    const result = await this.databaseService.query<{ id: number, password: string, }>(`SELECT * FROM users WHERE email = $1`, [email]);
     const user = result?.[0];
     return user;
   }
