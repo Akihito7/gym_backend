@@ -1,5 +1,5 @@
 import { BaseEntity } from "src/shared/domain/base.entity";
-import { Validator } from "src/shared/domain/validators/validator";
+import { ValidatorFactory } from "src/shared/domain/validators/validator";
 
 interface ExerciseConstructorProps {
   id?: number;
@@ -34,27 +34,27 @@ export class ExerciseEntity extends BaseEntity {
   get gifUrl(): string { return this._gifUrl; }
 
   set name(value: string) {
-    Validator.field('name', value, 'ExerciseEntity').required().minLength(3);
+    ValidatorFactory.string('name', value, 'ExerciseEntity').required().minLength(3);
     this._name = value;
   }
 
   set description(value: string) {
-    Validator.field('description', value, 'ExerciseEntity').required().minLength(3);
+    ValidatorFactory.string('description', value, 'ExerciseEntity').required().minLength(3);
     this._description = value;
   }
 
   set muscleGroup(value: string) {
-    Validator.field('muscleGroup', value, 'ExerciseEntity').required().minLength(3);
+    ValidatorFactory.string('muscleGroup', value, 'ExerciseEntity').required().minLength(3);
     this._muscleGroup = value;
   }
 
   set imageUrl(value: string) {
-    Validator.field('imageUrl', value, 'ExerciseEntity').required().isUrl()
+    ValidatorFactory.string('imageUrl', value, 'ExerciseEntity').required().isUrl()
     this._imageUrl = value;
   }
 
   set gifUrl(value: string) {
-    Validator.field('gifUrl', value, 'ExerciseEntity').required().isUrl()
+    ValidatorFactory.string('gifUrl', value, 'ExerciseEntity').required().isUrl()
     this._gifUrl = value;
   }
 }
