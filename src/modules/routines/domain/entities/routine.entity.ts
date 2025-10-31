@@ -1,6 +1,6 @@
 import { BaseEntity } from "src/shared/domain/base.entity";
-import { RoutineNameRequiredError } from "../errors/routine-name-required-error";
-import { RoutineNameTooShortError } from "../errors/routine-name-too-short-error";
+import { NameRequiredError } from "src/shared/domain/errors/required.error";
+import { NameTooShortError } from "src/shared/domain/errors/too-short-error";
 
 export class RoutineEntity extends BaseEntity {
   private _name: string;
@@ -26,12 +26,13 @@ export class RoutineEntity extends BaseEntity {
   private validateName(name: string) {
 
     const trimmedName = name?.trim();
+
     if (!trimmedName) {
-      throw new RoutineNameRequiredError()
+      throw new NameRequiredError('Você precisa dar um nome para sua rotina.', 'Routine')
     }
 
     if (trimmedName.length < 3) {
-      throw new RoutineNameTooShortError();
+      throw new NameTooShortError('O nome da sua rotina precisa ter no mínimo 3 caracteres.', 'Routine');
     }
   }
 }

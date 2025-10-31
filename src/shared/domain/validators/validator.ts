@@ -1,5 +1,7 @@
-import { NameRequiredError } from "../errors/name-required-error";
-import { NameTooShortError } from "../errors/name-too-short-error";
+import { InvalidError } from "../errors/invalid.error";
+import { RequiredError } from "../errors/required.error";
+import { TooLongError } from "../errors/too-long-error";
+import { TooShortError } from "../errors/too-short-error";
 
 export class Validator {
   private _fieldName: string;
@@ -19,7 +21,7 @@ export class Validator {
   required() {
     const trimmedValue = this._fieldValue.trim();
     if (!trimmedValue)
-      throw new NameRequiredError(
+      throw new RequiredError(
         `O campo : ${this._fieldName} não pode estar vazio.`,
         this._classToValidate
       );
@@ -28,7 +30,7 @@ export class Validator {
 
   minLength(minLength: number) {
     if (this._fieldValue.length < minLength)
-      throw new NameTooShortError(
+      throw new TooShortError(
         `O campo : ${this._fieldName} precisa ter no mínimo ${minLength} caracteres.`,
         this._classToValidate
       );
@@ -37,7 +39,7 @@ export class Validator {
 
   maxLength(maxLength: number) {
     if (this._fieldValue.length > maxLength)
-      throw new NameTooShortError(
+      throw new TooLongError(
         `O campo : ${this._fieldName} precisa ter no máximo ${maxLength} caracteres.`,
         this._classToValidate
       );
@@ -47,7 +49,7 @@ export class Validator {
   isEmail() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this._fieldValue))
-      throw new NameRequiredError(
+      throw new InvalidError(
         `O campo : ${this._fieldName} precisa ser um email válido.`,
         this._classToValidate
       );
@@ -58,7 +60,7 @@ export class Validator {
     try {
       new URL(this._fieldValue);
     } catch {
-      throw new NameRequiredError(
+      throw new InvalidError(
         `O campo : ${this._fieldName} precisa ser uma URL válida.`,
         this._classToValidate
       );
