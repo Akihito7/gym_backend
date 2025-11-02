@@ -17,18 +17,19 @@ export class TrainingSessionController {
     return this.trainingSessionService.createTrainingSession(body)
   }
 
+  @Get('history/:trainingId')
+  async getDetailsHistoryTraining(@Param("trainingId", ParseIntPipe) trainingId: number) {
+    return this.trainingSessionService.getDetailsHistoryTraining(trainingId)
+  }
+
   @Post("exercise")
-  async insertExercisesInTrainingSession(@Body()  body : any){
+  async insertExercisesInTrainingSession(@Body() body: any) {
     return this.trainingSessionService.insertExercisesInTrainingSession(body)
   }
+  
   @Post("exercise/series")
   async insertIntoSetsInTrainingSession(@Body() body: any) {
     return this.trainingSessionService.insertIntoSetsInTrainingSession(body)
-  }
-
-  @Get('history/:trainingId')
-  async getDetailsHistoryTraining(@Param("trainingId", ParseIntPipe) trainingId : number){
-    return this.trainingSessionService.getDetailsHistoryTraining(trainingId)
   }
 
 }
