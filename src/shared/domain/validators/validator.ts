@@ -16,6 +16,19 @@ export abstract class BaseValidator<T> {
     this._fieldValue = fieldValue;
     this._classToValidate = classToValidate;
   }
+
+  get fieldName() {
+    return this._fieldName;
+  }
+
+  get fieldValue() {
+    return this._fieldValue;
+  }
+
+  get classToValidate() {
+    return this._classToValidate
+  }
+
 }
 
 export class StringValidator extends BaseValidator<string> {
@@ -25,53 +38,63 @@ export class StringValidator extends BaseValidator<string> {
   }
 
   required() {
-    const trimmedValue = this._fieldValue.trim();
+    const trimmedValue = this.fieldValue.trim();
     if (!trimmedValue)
       throw new RequiredError(
-        `O campo : ${this._fieldName} não pode estar vazio.`,
-        this._classToValidate
+        `O campo : ${this.fieldName} não pode estar vazio.`,
+        this.classToValidate
       );
     return this;
   }
 
   minLength(minLength: number) {
-    if (this._fieldValue.length < minLength)
+    if (this.fieldValue.length < minLength)
       throw new TooShortError(
-        `O campo : ${this._fieldName} precisa ter no mínimo ${minLength} caracteres.`,
-        this._classToValidate
+        `O campo : ${this.fieldName} precisa ter no mínimo ${minLength} caracteres.`,
+        this.classToValidate
       );
     return this;
   }
 
   maxLength(maxLength: number) {
-    if (this._fieldValue.length > maxLength)
+    if (this.fieldValue.length > maxLength)
       throw new TooLongError(
-        `O campo : ${this._fieldName} precisa ter no máximo ${maxLength} caracteres.`,
-        this._classToValidate
+        `O campo : ${this.fieldName} precisa ter no máximo ${maxLength} caracteres.`,
+        this.classToValidate
       );
     return this;
   }
 
   isEmail() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this._fieldValue))
+    if (!emailRegex.test(this.fieldValue))
       throw new InvalidError(
-        `O campo : ${this._fieldName} precisa ser um email válido.`,
-        this._classToValidate
+        `O campo : ${this.fieldName} precisa ser um email válido.`,
+        this.classToValidate
       );
     return this;
   }
 
   isUrl() {
     try {
-      new URL(this._fieldValue);
+      new URL(this.fieldValue);
     } catch {
       throw new InvalidError(
-        `O campo : ${this._fieldName} precisa ser uma URL válida.`,
-        this._classToValidate
+        `O campo : ${this.fieldName} precisa ser uma URL válida.`,
+        this.classToValidate
       );
     }
     return this;
+  }
+
+  isValidDuration() {
+    const durationRegex = /^(\d{2,}:)?(\d{2}:)?[0-5]\d$/;
+    if (!durationRegex.test(this.fieldValue)) {
+      throw new TooLongError(
+        `O campo: ${this.fieldName} precisa estar no formato de duração 'MM:SS' ou 'HH:MM:SS' e ter os segundos entre 00 e 59.`,
+        this.classToValidate
+      );
+    }
   }
 }
 
@@ -82,26 +105,26 @@ export class NumberValidator extends BaseValidator<number> {
   }
 
   isPositive() {
-    if (this._fieldValue <= 0)
-      throw new NotPositiveError(`O campo ${this._fieldName} precisa ser positivo.`);
+    if (this.fieldValue <= 0)
+      throw new NotPositiveError(`O campo ${this.fieldName} precisa ser positivo.`);
     return this;
   }
 
   isInteger() {
-    if (!Number.isInteger(this._fieldValue))
-      throw new IsNotInteger(`O campo ${this._fieldName} precisa ser um número inteiro.`);
+    if (!Number.isInteger(this.fieldValue))
+      throw new IsNotInteger(`O campo ${this.fieldName} precisa ser um número inteiro.`);
     return this;
   }
 
   min(minValue: number) {
-    if (this._fieldValue < minValue)
-      throw new TooShortError(`O campo ${this._fieldName} precisa ser no mínimo ${minValue}.`);
+    if (this.fieldValue < minValue)
+      throw new TooShortError(`O campo ${this.fieldName} precisa ser no mínimo ${minValue}.`);
     return this;
   }
 
   max(maxValue: number) {
-    if (this._fieldValue > maxValue)
-      throw new TooLongError(`O campo ${this._fieldName} precisa ser no máximo ${maxValue}.`);
+    if (this.fieldValue > maxValue)
+      throw new TooLongError(`O campo ${this.fieldName} precisa ser no máximo ${maxValue}.`);
     return this;
   }
 }
