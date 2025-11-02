@@ -2,7 +2,7 @@ import { BaseEntity } from "src/shared/domain/base.entity";
 import { ValidatorFactory } from "src/shared/domain/validators/validator";
 
 
-interface WorkoutSetConstructorProps {
+export interface WorkoutSetConstructorProps {
   id?: number;
   workoutExerciseId: number;
   reps: number;
@@ -74,5 +74,4 @@ export class WorkoutSetEntity extends BaseEntity {
       .isPositive();
     this._orderSet = orderSet;
   }
-
 }
