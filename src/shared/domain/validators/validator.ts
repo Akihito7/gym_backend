@@ -95,6 +95,7 @@ export class StringValidator extends BaseValidator<string> {
         this.classToValidate
       );
     }
+    return this;
   }
 }
 
